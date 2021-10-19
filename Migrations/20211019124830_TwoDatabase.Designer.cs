@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestSigmatech.Data;
@@ -9,9 +10,10 @@ using TestSigmatech.Data;
 namespace TestSigmatech.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211019124830_TwoDatabase")]
+    partial class TwoDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,12 @@ namespace TestSigmatech.Migrations
                     b.Property<string>("check_status")
                         .HasColumnType("text");
 
-                    b.Property<string>("t_dukcapil_check_result")
-                        .HasColumnType("text");
+                    b.Property<int?>("t_dukcapil_check_resultNIK")
+                        .HasColumnType("integer");
 
                     b.HasKey("NIK");
+
+                    b.HasIndex("t_dukcapil_check_resultNIK");
 
                     b.ToTable("checkResult");
                 });
@@ -73,46 +77,13 @@ namespace TestSigmatech.Migrations
                     b.ToTable("status");
                 });
 
-            modelBuilder.Entity("TestSigmatech.Models.mMaritalStatus", b =>
+            modelBuilder.Entity("TestSigmatech.Models.CheckResult", b =>
                 {
-                    b.Property<int>("m_marital_status_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.HasOne("TestSigmatech.Models.CheckResult", "t_dukcapil_check_result")
+                        .WithMany()
+                        .HasForeignKey("t_dukcapil_check_resultNIK");
 
-                    b.Property<string>("marital_status_desc")
-                        .HasColumnType("text");
-
-                    b.HasKey("m_marital_status_id");
-
-                    b.ToTable("mMaritalStatus");
-                });
-
-            modelBuilder.Entity("TestSigmatech.Models.mReligion", b =>
-                {
-                    b.Property<int>("religion_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("dtm_crt")
-                        .HasColumnType("text");
-
-                    b.Property<string>("dtm_upd")
-                        .HasColumnType("text");
-
-                    b.Property<string>("religion_name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("usr_crt")
-                        .HasColumnType("text");
-
-                    b.Property<string>("usr_upd")
-                        .HasColumnType("text");
-
-                    b.HasKey("religion_id");
-
-                    b.ToTable("mReligion");
+                    b.Navigation("t_dukcapil_check_result");
                 });
 #pragma warning restore 612, 618
         }

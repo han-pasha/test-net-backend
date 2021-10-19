@@ -20,6 +20,7 @@ namespace TestSigmatech.Controllers {
         [HttpGet("{id}")]
         public async Task<ActionResult<Status>> GetStatus(int id){
             var status = await statusRepository.Get(id);
+            
             if (status is null) {
                 return NotFound();
             }
@@ -29,11 +30,27 @@ namespace TestSigmatech.Controllers {
 
         [HttpGet]
         public async Task<ActionResult<Status>> GetNik(int NIK){
+
             var status = await statusRepository.GetNik(NIK);
+            var checkResult = new CheckResult{
+                t_dukcapil_check_result = "Ini field apa?",
+                NIK = status.NIK,
+                check_dtm = DateTime.Now,
+                check_status = "Found",
+            };
+
+            await statusRepository.AddCheckResult(checkResult);
             if (status is null) {
-                return NotFound();
+                var checkResultNotFound = new CheckResult{
+                t_dukcapil_check_result = "Ini field apa?",
+                NIK = status.NIK,
+                check_dtm = DateTime.Now,
+                check_status = "NotFound",
+            };
+                return NotFound(checkResult);
             }
-            return Ok(status);
+
+            return Ok(checkResult);
 
         }
 
@@ -46,6 +63,17 @@ namespace TestSigmatech.Controllers {
             return Ok(status);
 
         }
+
+        [HttpGet("getallcheckstatus")]
+        public async Task<ActionResult<IEnumerable<CheckResult>>> GetAllResults(){
+            var checkResult = await statusRepository.GetAllResults();
+            if (checkResult is null) {
+                return NotFound();
+            }
+            return Ok(checkResult);
+
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> CreateStatus(CreateStatusDto createStatusDto){

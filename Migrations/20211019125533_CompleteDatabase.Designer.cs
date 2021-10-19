@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestSigmatech.Data;
@@ -9,9 +10,10 @@ using TestSigmatech.Data;
 namespace TestSigmatech.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211019125533_CompleteDatabase")]
+    partial class CompleteDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,12 @@ namespace TestSigmatech.Migrations
                     b.Property<string>("check_status")
                         .HasColumnType("text");
 
-                    b.Property<string>("t_dukcapil_check_result")
-                        .HasColumnType("text");
+                    b.Property<int?>("t_dukcapil_check_resultNIK")
+                        .HasColumnType("integer");
 
                     b.HasKey("NIK");
+
+                    b.HasIndex("t_dukcapil_check_resultNIK");
 
                     b.ToTable("checkResult");
                 });
@@ -113,6 +117,15 @@ namespace TestSigmatech.Migrations
                     b.HasKey("religion_id");
 
                     b.ToTable("mReligion");
+                });
+
+            modelBuilder.Entity("TestSigmatech.Models.CheckResult", b =>
+                {
+                    b.HasOne("TestSigmatech.Models.CheckResult", "t_dukcapil_check_result")
+                        .WithMany()
+                        .HasForeignKey("t_dukcapil_check_resultNIK");
+
+                    b.Navigation("t_dukcapil_check_result");
                 });
 #pragma warning restore 612, 618
         }

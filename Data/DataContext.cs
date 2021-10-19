@@ -10,5 +10,8 @@ namespace TestSigmatech.Data {
         }     
 
         public DbSet<Status> status {get;init; }
+        public DbSet<CheckResult> checkResult {get;init;}
+        public DbSet<mMaritalStatus> mMaritalStatus {get;init;}
+        public DbSet<mReligion> mReligion {get;init;}
     }
 }

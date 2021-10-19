@@ -64,5 +64,17 @@ namespace TestSigmatech.Repositories {
             await _context.SaveChangesAsync();
 
         }
+
+        // DB KEDUA
+        public async Task AddCheckResult(CheckResult checkResult)
+        {
+            _context.checkResult.Add(checkResult);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<CheckResult>> GetAllResults()
+        {
+            return await _context.checkResult.ToListAsync();
+        }
     }
 }
