@@ -1,4 +1,5 @@
-# test-sigmatech-backend
+# test-net-backend
+Challenge created in 1 day.
 #Stable 0.1
 Backend using .NET and Postgresql
 
